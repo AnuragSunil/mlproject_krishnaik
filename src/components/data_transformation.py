@@ -1,3 +1,4 @@
+import os
 import sys
 from dataclasses import dataclass
 
@@ -10,13 +11,13 @@ from sklearn.preprocessing import OneHotEncoder, StandardScaler
 
 from src.exception import CustomException
 from src.logger import logging
-import os
-
 from src.utils import save_object
+
 
 @dataclass
 class DataTransformationConfig:
-    preprocessor_obj_file_path = os.path.join('artifacts', 'preprocessor.pkl')
+    preprocessor_obj_file_path: str = os.path.join('artifacts', 'preprocessor.pkl')
+
 
 class DataTransformation:
     '''
@@ -24,7 +25,7 @@ class DataTransformation:
     '''
     def __init__(self):
         self.data_transformation_config = DataTransformationConfig()
-    
+
     def get_data_transformer_object(self):
         try:
             numerical_columns = ['writing_score', 'reading_score']
@@ -103,12 +104,3 @@ class DataTransformation:
 
         except Exception as e:
             raise CustomException(e, sys)
-
-# Example usage:
-if __name__ == "__main__":
-    try:
-        data_transformation = DataTransformation()
-        train_data, test_data = "path_to_train_data.csv", "path_to_test_data.csv"  # Replace with actual paths
-        data_transformation.initiate_data_transformation(train_data, test_data)
-    except Exception as e:
-        logging.error("Exception occurred during data transformation", exc_info=True)
